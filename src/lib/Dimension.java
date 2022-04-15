@@ -13,8 +13,8 @@ public class Dimension {
   /* DIMENSION METHODS */
 
   // Constructor:
-  public Dimension(int networksLength, int inputsLength, int hiddenLength, int outputsLength, 
-    double mutationMin, double mutationMax, Functions activation) {
+  public Dimension(int networksLength, int inputsLength, int hiddenLength, int outputsLength,
+      double mutationMin, double mutationMax, Functions activation) {
     // Loop Variable:
     int turns = 0;
 
@@ -33,13 +33,13 @@ public class Dimension {
   }
 
   // Train Method:
-  public Network train(double allInputs[][], double allExpectedResults[][]) throws Exception {
+  public Network train(double allInputs[][], double allExpectedResults[][], int epochCount) throws Exception {
     // Loop Variables:
     int turns = 0;
 
     // Checks the Case:
-    if (bestNetwork.getHiddenLayer().size() != 0 
-      && bestNetwork.getOutputLayer().size() != 0) {
+    if (bestNetwork.getHiddenLayer().size() != 0
+        && bestNetwork.getOutputLayer().size() != 0) {
       // Loop Variable:
       int loops = 0;
 
@@ -54,32 +54,39 @@ public class Dimension {
 
     // Loops through Array:
     mainLoop: while (turns < allInputs.length) {
-      // Loop Variables:
-      int counts = 0;
-      int moves = 0;
-      double errors[] = new double[networks.size()];
+      // Loop Variable:
+      int epochs = 0;
 
-      // Loops through Array:
-      secondLoop: while (counts < networks.size()) {
-        // Sets the Error:
-        double outputs[] = networks.get(counts).runNetwork(allInputs[turns]);
-        double error = networks.get(counts).getError(outputs, allExpectedResults[turns]);
-        errors[counts] = error;
+      // Loops through Epochs:
+      epochLoop: while (epochs < epochCount) {
+        // Loop Variables:
+        int counts = 0;
+        int moves = 0;
+        double errors[] = new double[networks.size()];
 
-        counts++;
+        // Loops through Array:
+        secondLoop: while (counts < networks.size()) {
+          // Sets the Error:
+          double outputs[] = networks.get(counts).runNetwork(allInputs[turns]);
+          errors[counts] = networks.get(counts).getError(outputs, allExpectedResults[turns]);
+
+          counts++;
+        }
+
+        // Gets the Best Network:
+        bestNetwork = getBest(errors);
+
+        // Loops through Array:
+        thirdLoop: while (moves < networks.size()) {
+          // Mutates the Array:
+          networks.get(moves).mutation(bestNetwork.getHiddenLayer(), bestNetwork.getOutputLayer());
+
+          moves++;
+        }
+
+        epochs++;
       }
 
-      // Gets the Best Network:
-      bestNetwork = getBest(errors);
-
-      // Loops through Array:
-      thirdLoop: while (moves < networks.size()) {
-        // Mutates the Array:
-        networks.get(moves).mutation(bestNetwork.getHiddenLayer(), bestNetwork.getOutputLayer());
-
-        moves++;
-      }
-      
       turns++;
     }
 
@@ -97,19 +104,19 @@ public class Dimension {
     mainLoop: while (turns < errors.length) {
       // Checks the Case:
       if (turns == 0) {
-        // Sets the Worsts:
+        // Sets the Worst:
         worstError = errors[turns];
       }
 
       else {
         // Checks the Case:
-        if (errors[turns] <= worstError) {
+        if (errors[turns] < worstError) {
           // Sets the Worsts:
           worstError = errors[turns];
           worstIndex = turns;
         }
       }
-      
+
       turns++;
     }
 

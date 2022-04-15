@@ -13,8 +13,8 @@ public class Network {
   /* NETWORK METHODS */
 
   // Constructor:
-  public Network(int inputsLength, int hiddenLength, int outputsLength, double mutationMin, 
-    double mutationMax, Functions activation) {
+  public Network(int inputsLength, int hiddenLength, int outputsLength, double mutationMin,
+      double mutationMax, Functions activation) {
     try {
       // Loop Variables:
       int turns = 0;
@@ -28,12 +28,25 @@ public class Network {
         turns++;
       }
 
-      // Loops through Array:
-      secondLoop: while (counts < outputsLength) {
-        // Sets the Output Layer:
-        outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, activation));
+      // Checks the Case:
+      if (hiddenLength != 0) {
+        // Loops through Array:
+        secondLoop: while (counts < outputsLength) {
+          // Sets the Output Layer:
+          outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, activation));
 
-        counts++;
+          counts++;
+        }
+      }
+
+      else {
+        // Loops through Array:
+        secondLoop: while (counts < outputsLength) {
+          // Sets the Output Layer:
+          outputLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, activation));
+
+          counts++;
+        }
       }
     }
 
@@ -48,8 +61,8 @@ public class Network {
   }
 
   // Mutation Method:
-  public void mutation(ArrayList<Neuron> referenceHiddenLayer, ArrayList<Neuron> referenceOutputLayer) 
-    throws Exception {
+  public void mutation(ArrayList<Neuron> referenceHiddenLayer, ArrayList<Neuron> referenceOutputLayer)
+      throws Exception {
     // Loop Variables:
     int turns = 0;
     int counts = 0;
@@ -58,7 +71,7 @@ public class Network {
     mainLoop: while (turns < hiddenLayer.size()) {
       // Mutates:
       hiddenLayer.get(turns).mutateWeights(referenceHiddenLayer.get(turns).getWeights());
-      
+
       turns++;
     }
 
@@ -66,7 +79,7 @@ public class Network {
     secondLoop: while (counts < outputLayer.size()) {
       // Mutates:
       outputLayer.get(counts).mutateWeights(referenceOutputLayer.get(counts).getWeights());
-      
+
       counts++;
     }
   }
@@ -81,7 +94,7 @@ public class Network {
     mainLoop: while (turns < outputs.length) {
       // Gets the Errors:
       error += Math.abs(expectedResults[turns] - outputs[turns]);
-      
+
       turns++;
     }
 
@@ -94,17 +107,25 @@ public class Network {
     // Array Variables:
     double hiddenOutputs[] = new double[hiddenLayer.size()];
     double outputOutputs[] = new double[outputLayer.size()];
-    
+
     // Loop Variables:
     int turns = 0;
     int counts = 0;
 
-    // Loops through Array:
-    mainLoop: while (turns < hiddenOutputs.length) {
-      // Gets the Outputs:
-      hiddenOutputs[turns] = hiddenLayer.get(turns).getOutput(inputs);
-      
-      turns++;
+    // Checks the Case:
+    if (hiddenLayer.size() != 0) {
+      // Loops through Array:
+      mainLoop: while (turns < hiddenOutputs.length) {
+        // Gets the Outputs:
+        hiddenOutputs[turns] = hiddenLayer.get(turns).getOutput(inputs);
+
+        turns++;
+      }
+    }
+
+    else {
+      // Sets the Hidden Outputs:
+      hiddenOutputs = inputs;
     }
 
     // Loops through Array:
@@ -124,7 +145,7 @@ public class Network {
   // Get Hidden Layer Method:
   public ArrayList<Neuron> getHiddenLayer() throws Exception {
     // Returns the Hidden Layer:
-    return hiddenLayer; 
+    return hiddenLayer;
   }
 
   // Set Hidden Layer Method:
@@ -136,7 +157,7 @@ public class Network {
   // Get Output Layer Method:
   public ArrayList<Neuron> getOutputLayer() throws Exception {
     // Returns the Output Layer:
-    return outputLayer; 
+    return outputLayer;
   }
 
   // Set Output Layer Method:

@@ -45,8 +45,8 @@ public class Neuron {
     // Loops through Array:
     mainLoop: while (turns < weights.size()) {
       // Mutates the Weight:
-      double mutant = ((Math.random() * Math.abs(mutationMaximum - mutationMinimum)) + mutationMinimum);
-      weights.set(turns, step(referenceWeights.get(turns) * mutant));
+      double mutant = ((Math.random() * Math.abs(mutationMaximum - mutationMinimum)) + Math.abs(mutationMinimum));
+      weights.set(turns, constrain(referenceWeights.get(turns) * mutant));
       
       turns++;
     }
@@ -72,11 +72,6 @@ public class Neuron {
       return sigmoid(output);
     }
 
-    else if (activationFunction == Functions.RELU) {
-      // Returns the Activation:
-      return relu(output);
-    }
-
     else {
       // Returns the Activation:
       return step(output);
@@ -97,20 +92,8 @@ public class Neuron {
     weights = newWeights;
   }
 
-  // Sigmoid Method:
-  private double sigmoid(double input) throws Exception {
-    // Returns the Sigmoid Activation:
-    return 1 / (1 + (Math.pow(Math.E, -input)));
-  }
-
-  // ReLU Method:
-  private double relu(double input) throws Exception {
-    // Returns the ReLU Activation:
-    return Math.max(0, input);
-  }
-
   // Step Method:
-  private double step(double input) throws Exception {
+  private double constrain(double input) throws Exception {
     // Checks the Case:
     if (input >= 1) {
       // Returns the Value:
@@ -124,6 +107,28 @@ public class Neuron {
 
     else {
       // Returns the Value:
+      return 0;
+    }
+  }
+
+  /* NEURON ACTIVATION METHODS */
+
+  // Sigmoid Method:
+  private double sigmoid(double input) throws Exception {
+    // Returns the Sigmoid Activation:
+    return 1 / (1 + (Math.pow(Math.E, -input)));
+  }
+
+  // Step Method:
+  private double step(double input) throws Exception {
+    // Checks the Case:
+    if (input >= 0.5) {
+      // Returns the Activation:
+      return 1;
+    }
+
+    else {
+      // Returns the Activation:
       return 0;
     }
   }
