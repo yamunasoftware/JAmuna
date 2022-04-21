@@ -14,7 +14,7 @@ public class Network {
 
   // Constructor:
   public Network(int inputsLength, int hiddenLength, int outputsLength, double mutationMin,
-      double mutationMax, Functions activation) {
+      double mutationMax, double outThreshold, Functions activation) {
     try {
       // Loop Variables:
       int turns = 0;
@@ -23,7 +23,7 @@ public class Network {
       // Loops through Array:
       mainLoop: while (turns < hiddenLength) {
         // Sets the Hidden Layers:
-        hiddenLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, activation));
+        hiddenLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, outThreshold, activation));
 
         turns++;
       }
@@ -33,7 +33,7 @@ public class Network {
         // Loops through Array:
         secondLoop: while (counts < outputsLength) {
           // Sets the Output Layer:
-          outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, activation));
+          outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, outThreshold, activation));
 
           counts++;
         }
@@ -43,7 +43,7 @@ public class Network {
         // Loops through Array:
         secondLoop: while (counts < outputsLength) {
           // Sets the Output Layer:
-          outputLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, activation));
+          outputLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, outThreshold, activation));
 
           counts++;
         }

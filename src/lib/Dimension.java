@@ -14,14 +14,15 @@ public class Dimension {
 
   // Constructor:
   public Dimension(int networksLength, int inputsLength, int hiddenLength, int outputsLength,
-      double mutationMin, double mutationMax, Functions activation) {
+      double mutationMin, double mutationMax, double outThreshold, Functions activation) {
     // Loop Variable:
     int turns = 0;
 
     // Loops through Array:
     mainLoop: while (turns < networksLength) {
       // Adds the Network:
-      networks.add(new Network(inputsLength, hiddenLength, outputsLength, mutationMin, mutationMax, activation));
+      networks.add(new Network(inputsLength, hiddenLength, outputsLength, mutationMin, mutationMax, 
+        outThreshold, activation));
 
       turns++;
     }
