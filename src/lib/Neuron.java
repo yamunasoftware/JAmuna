@@ -72,9 +72,14 @@ public class Neuron {
       return sigmoid(output);
     }
 
-    else {
+    else if (activationFunction == Functions.STEP) {
       // Returns the Activation:
       return step(output);
+    }
+
+    else {
+      // Returns the Output:
+      return output;
     }
   }
 
@@ -116,19 +121,19 @@ public class Neuron {
   // Sigmoid Method:
   private double sigmoid(double input) throws Exception {
     // Returns the Sigmoid Activation:
-    return 1 / (1 + (Math.pow(Math.E, -input)));
+    return (1 / (1 + Math.exp(-input)));
   }
 
   // Step Method:
   private double step(double input) throws Exception {
     // Checks the Case:
     if (input >= 0.5) {
-      // Returns the Activation:
+      // Returns the Value:
       return 1;
     }
 
     else {
-      // Returns the Activation:
+      // Returns the Value:
       return 0;
     }
   }

@@ -124,6 +124,35 @@ public class Dimension {
     return networks.get(worstIndex);
   }
 
+  // Transform Inputs Method:
+  public double[][] transformInputs(double inputs[][], double max) throws Exception {
+    // Loops Variables:
+    double localInputs[][] = inputs;
+    int turns = 0;
+
+    // Checks the Case:
+    if (max != 0) {
+      // Loops through Array:
+      mainLoop: while (turns < localInputs.length) {
+        // Loop Variable:
+        int counts = 0;
+
+        // Loops through Array:
+        secondLoop: while (counts < localInputs[turns].length) {
+          // Transforms Inputs:
+          localInputs[turns][counts] /= max;
+          
+          counts++;
+        }
+        
+        turns++;
+      }
+    }
+
+    // Returns the Inputs:
+    return inputs;
+  }
+
   /* DIMENSION UTILITY METHODS */
 
   // Get Best Network Method:

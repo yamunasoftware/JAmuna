@@ -93,7 +93,7 @@ public class Network {
     // Loops through Array:
     mainLoop: while (turns < outputs.length) {
       // Gets the Errors:
-      error += Math.abs(expectedResults[turns] - outputs[turns]);
+      error += Math.pow((Math.abs(expectedResults[turns] - outputs[turns])), 2);
 
       turns++;
     }
@@ -138,6 +138,27 @@ public class Network {
 
     // Returns the Outputs:
     return outputOutputs;
+  }
+
+  // Transform Inputs Method:
+  public double[] transformInputs(double inputs[], double max) throws Exception {
+    // Loop Variables:
+    double localInputs[] = inputs;
+    int turns = 0;
+
+    // Checks the Case:
+    if (max != 0) {
+      // Loops through Array:
+      mainLoop: while (turns < localInputs.length) {
+        // Transforms Inputs:
+        localInputs[turns] /= max;
+
+        turns++;
+      }
+    }
+
+    // Returns the Inputs:
+    return localInputs;
   }
 
   /* NETWORK UTILITY METHODS */
