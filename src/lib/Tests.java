@@ -7,30 +7,27 @@ public class Tests {
   // Test Arrays:
   private static double inputs[][] = {
     {35}, {22}, {41}, {15}, {29}, {11}, {37}, {48},
-    {92}, {80}, {77}, {62}, {53}, {64}, {55}, {97}
+    {102}, {110}, {125}, {100}, {107}, {122}, {118}, {116}
   };
   private static double outputs[][] = {
     {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0},
     {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}
   };
-  private static double testInputs[] = {40};
+  private static double testInputs[] = {110};
 
   // Test Settings:
-  private static int networks = 10000, inputLength = inputs[0].length, hiddenLength = 0, 
-    outputLength = outputs[0].length, epochs = 100;
-  private static double mutMin = 0.95, mutMax = 1.05, outThreshold = 0.6, max = 100;
+  private static int networks = 10000, inputLength = inputs[0].length, hiddenLength = 0, epochs = 100;
+  private static double mutMin = 0.95, mutMax = 1.05, max = 100;
   private static Functions activation = Functions.SIGMOID;
 
   /* TEST METHODS */
 
   // Test Algorithm Method:
-  public static double[] testAlgorithm() throws Exception {
-    // Object Instantiation:
-    Dimension dimension = new Dimension(networks, inputLength, hiddenLength, outputLength, mutMin, 
-      mutMax, outThreshold, activation);
-
-    // Training:
+  public static double testAlgorithm() throws Exception {
+    // Training Test:
+    Dimension dimension = new Dimension(networks, inputLength, hiddenLength, mutMin, 
+      mutMax, activation);
     Network best = dimension.train(dimension.transformInputs(inputs, max), outputs, epochs);
-    return best.runNetwork(best.transformInputs(testInputs, max));
+    return best.finalStep(best.runNetwork(best.transformInputs(testInputs, max)));
   }
 }

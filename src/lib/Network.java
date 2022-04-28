@@ -13,8 +13,8 @@ public class Network {
   /* NETWORK METHODS */
 
   // Constructor:
-  public Network(int inputsLength, int hiddenLength, int outputsLength, double mutationMin,
-      double mutationMax, double outThreshold, Functions activation) {
+  public Network(int inputsLength, int hiddenLength, double mutationMin,
+      double mutationMax, Functions activation) {
     try {
       // Loop Variables:
       int turns = 0;
@@ -23,30 +23,20 @@ public class Network {
       // Loops through Array:
       mainLoop: while (turns < hiddenLength) {
         // Sets the Hidden Layers:
-        hiddenLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, outThreshold, activation));
+        hiddenLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, activation));
 
         turns++;
       }
 
       // Checks the Case:
       if (hiddenLength != 0) {
-        // Loops through Array:
-        secondLoop: while (counts < outputsLength) {
-          // Sets the Output Layer:
-          outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, outThreshold, activation));
-
-          counts++;
-        }
+        // Sets the Output Layer:
+        outputLayer.add(new Neuron(hiddenLength, mutationMin, mutationMax, activation));
       }
 
       else {
-        // Loops through Array:
-        secondLoop: while (counts < outputsLength) {
-          // Sets the Output Layer:
-          outputLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, outThreshold, activation));
-
-          counts++;
-        }
+        // Sets the Output Layer:
+        outputLayer.add(new Neuron(inputsLength, mutationMin, mutationMax, activation));
       }
     }
 
@@ -100,6 +90,20 @@ public class Network {
 
     // Returns the Error:
     return error;
+  }
+
+  // Final Step Method:
+  public double finalStep(double networkOutput[]) throws Exception {
+    // Checks the Case:
+    if (networkOutput[0] >= 0.5) {
+      // Returns the Step Activation:
+      return 1;
+    }
+
+    else {
+      // Returns the Step Activation:
+      return 0;
+    }
   }
 
   // Run Network Method:

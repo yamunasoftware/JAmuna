@@ -10,13 +10,11 @@ public class Neuron {
   private ArrayList<Double> weights = new ArrayList<Double>();
   private Functions activationFunction = Functions.SIGMOID;
   private double mutationMinimum = 0, mutationMaximum = 1;
-  private double outputThreshold = 0;
 
   /* NEURON METHODS */
 
   // Constructor:
-  public Neuron(int inputsLength, double mutationMin, double mutationMax, double outThreshold, 
-    Functions activation) {
+  public Neuron(int inputsLength, double mutationMin, double mutationMax, Functions activation) {
     // Loop Variable:
     int turns = 0;
 
@@ -32,7 +30,6 @@ public class Neuron {
     activationFunction = activation;
     mutationMinimum = mutationMin;
     mutationMaximum = mutationMax;
-    outputThreshold = outThreshold;
   }
 
   // Constructor:
@@ -77,7 +74,7 @@ public class Neuron {
 
     else if (activationFunction == Functions.STEP) {
       // Returns the Activation:
-      return step(output, outputThreshold);
+      return step(output);
     }
 
     else {
@@ -124,13 +121,13 @@ public class Neuron {
   // Sigmoid Method:
   private double sigmoid(double input) throws Exception {
     // Returns the Sigmoid Activation:
-    return (1 / (1 + Math.exp(-input)));
+    return preStep(1 / (1 + Math.exp(-input)));
   }
 
   // Step Method:
-  private double step(double input, double threshold) throws Exception {
+  private double step(double input) throws Exception {
     // Checks the Case:
-    if (input >= threshold) {
+    if (preStep(input) >= 0.5) {
       // Returns the Step Activation:
       return 1;
     }
@@ -139,5 +136,11 @@ public class Neuron {
       // Returns the Step Activation:
       return 0;
     }
+  }
+
+  // Pre-Step Method:
+  private double preStep(double input) throws Exception {
+    // Returns the Value:
+    return ((input - 0.5) / 0.5);
   }
 }
