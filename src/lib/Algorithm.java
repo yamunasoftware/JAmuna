@@ -8,7 +8,7 @@ public class Algorithm {
 
   // Weights Array:
   private ArrayList<Double> weights = new ArrayList<Double>();
-  private double outputs = 0;
+  private double outputs = 0, confidence = 0;
 
   /* ALGORITHM SETUP METHODS */
 
@@ -58,8 +58,13 @@ public class Algorithm {
         turns++;
       }
 
-      // Gets the Output:
-      return Math.round(activation(summation) * outputs);
+      // Gets the Outputs:
+      double output = (activation(summation) * outputs);
+      double finalOutput = Math.round(output);
+      confidence = Math.abs(finalOutput - output);
+
+      // Returns the Final Output:
+      return finalOutput;
     }
 
     else {
@@ -93,6 +98,12 @@ public class Algorithm {
   public ArrayList<Double> getWeights() throws Exception {
     // Returns the Weights:
     return weights;
+  }
+
+  // Get Confidence Method:
+  public double getConfidence() throws Exception {
+    // Returns the Confidence:
+    return confidence;
   }
 
   // Activation Method:
