@@ -6,14 +6,14 @@ public class Tests {
 
   // Test Arrays:
   private static double inputs[][] = {
-    {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1},
-    {10, 10}, {10, 10}, {10, 10}, {10, 10}, {10, 10}
+    {0, 10}, {0, 10}, {0, 10}, {0, 10}, {0, 10},
+    {100, 0}, {100, 0}, {100, 0}, {100, 0}, {100, 0}
   };
   private static double outputs[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2};
-  private static double testInputs[] = {2, 2};
+  private static double testInputs[] = {0, 10};
 
   // Algorithm Setup Variables:
-  private static int inputLength = inputs[0].length, nodes = 10, epochs = 10;
+  private static int inputLength = inputs[0].length, nodes = 100, epochs = 100;
   private static double outputLength = outputs[outputs.length-1];
 
   /* TEST METHODS */
