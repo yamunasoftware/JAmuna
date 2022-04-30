@@ -8,7 +8,7 @@ The JAmuna library is a machine learning library that is built from using neural
 
 The key is to keep all of your inputs as arrays with the same length to avoid any bugs during the testing process, and for further details you can see our "Tests.java" class for how to train and run the network. The library is modular and each piece of the library combines into a bigger whole, which is only possible because of the segmented Object-Oriented approach that we took to build this library. The "Storage.java" class is used to save and open stored networks that are trained and used for future running or training.
 
-The main algorithmic methods can be found in the "Algorithm.java" class, which is the main code for the running of the classification system. The other class is the "Training.java" class includes the methods for the training and learning aspects of the library. The class handles the physical data processing feature of the library, which makes the development and testing process much easier. To get the final output of the algorithm class, simply take the output and use the "Math.round" method to get your final output.
+The main algorithmic methods can be found in the "Algorithm.java" class, which is the main code for the running of the classification system. The other class is the "Training.java" class includes the methods for the training and learning aspects of the library. The class handles the physical data processing feature of the library, which makes the development and testing process much easier.
 
 ## Installation
 

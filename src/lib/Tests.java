@@ -10,7 +10,7 @@ public class Tests {
     {10, 10}, {10, 10}, {10, 10}, {10, 10}, {10, 10}
   };
   private static double outputs[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2};
-  private static double testInputs[] = {10, 10};
+  private static double testInputs[] = {2, 2};
 
   // Algorithm Setup Variables:
   private static int inputLength = inputs[0].length, nodes = 10, epochs = 10;
