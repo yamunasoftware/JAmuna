@@ -9,13 +9,14 @@ public class Training {
   // Training Algorithms Array:
   private ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
   private int loops = 0;
-  private double mutationMin = 0, mutationMax = 1;
+  private double mutationMin = 0, mutationMax = 2;
 
   /* TRAINING METHODS */
 
   // Constructor:
-  public Training(int inputLength, int nodes, int epochs, double outputLength, double mutMin, double mutMax) {
-    // Loop Variable:
+  public Training(int inputLength, int nodes, int epochs, double outputLength) {
+    // Loop Setup:
+    loops = epochs;
     int turns = 0;
 
     // Loops through Array:
@@ -25,11 +26,6 @@ public class Training {
 
       turns++;
     }
-
-    // Sets the Training Settings:
-    loops = epochs;
-    mutationMin = mutMin;
-    mutationMax = mutMax;
   }
 
   // Training Method:
@@ -141,5 +137,19 @@ public class Training {
 
       turns++;
     }
+  }
+
+  /* TRAINING SETTINGS METHODS */
+
+  // Set Mutation Minimum Method:
+  public void setMutationMin(double min) throws Exception {
+    // Sets the Value:
+    mutationMin = min;
+  }
+
+  // Set Mutation Maximum Method:
+  public void setMutationMax(double max) throws Exception {
+    // Sets the Value:
+    mutationMax = max;
   }
 }

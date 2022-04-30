@@ -8,7 +8,7 @@ public class Algorithm {
 
   // Weights Array:
   private ArrayList<Double> weights = new ArrayList<Double>();
-  private double outputs = 0, confidence = 0;
+  private double outputs = 0;
 
   /* ALGORITHM SETUP METHODS */
 
@@ -43,7 +43,7 @@ public class Algorithm {
   /* ALGORITHM METHODS */
 
   // Get Output Method:
-  public double getOutput(double inputs[]) throws Exception {
+  public double getOutput(double inputs[]) throws Exception {    
     // Checks the Case:
     if (inputs.length == weights.size()) {
       // Loop Variable:
@@ -58,13 +58,8 @@ public class Algorithm {
         turns++;
       }
 
-      // Gets the Outputs:
-      double output = (activation(summation) * outputs);
-      double finalOutput = Math.round(output);
-      confidence = Math.abs(finalOutput - output);
-
-      // Returns the Final Output:
-      return finalOutput;
+      // Returns the Output:
+      return activation(summation) * outputs;
     }
 
     else {
@@ -92,6 +87,12 @@ public class Algorithm {
     return newWeights;
   }
 
+  // Activation Method:
+  private double activation(double input) throws Exception {
+    // Sigmoid Activation:
+    return 1 / (1 + Math.pow(Math.E, -input));
+  }
+
   /* ALGORITHM UTILITY METHODS */
 
   // Get Weights Method:
@@ -100,15 +101,9 @@ public class Algorithm {
     return weights;
   }
 
-  // Get Confidence Method:
-  public double getConfidence() throws Exception {
-    // Returns the Confidence:
-    return confidence;
-  }
-
-  // Activation Method:
-  private double activation(double input) throws Exception {
-    // Returns the Activation:
-    return (1 / (1 + Math.exp(-input)));
+  // Set Weights Method:
+  public void setWeights(ArrayList<Double> newWeights) throws Exception {
+    // Sets the Weights:
+    weights = newWeights;
   }
 }
