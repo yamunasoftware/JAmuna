@@ -14,7 +14,7 @@ public class Training {
   /* TRAINING METHODS */
 
   // Constructor:
-  public Training(int inputLength, int nodes, int epochs, double outputLength) {
+  public Training(int inputLength, int nodes, int epochs, double outputLength, double mutMin, double mutMax) {
     // Loop Setup:
     loops = epochs;
     int turns = 0;
@@ -26,6 +26,10 @@ public class Training {
 
       turns++;
     }
+
+    // Sets the Mutation Values:
+    mutationMin = mutMin;
+    mutationMax = mutMax;
   }
 
   // Training Method:

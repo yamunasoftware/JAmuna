@@ -59,7 +59,7 @@ public class Algorithm {
       }
 
       // Returns the Output:
-      return Math.round(activation(summation) * outputs);
+      return (activation(summation) * outputs);
     }
 
     else {
