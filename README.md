@@ -15,6 +15,7 @@ The main algorithmic methods can be found in the "Algorithm.java" class, which i
 The installation for this library is listed below either using the Maven or Gradle build tools. Both of these tools are ubiquitous in the Java build environment world. The other option for using this library in your code is to use this as a module or use the included jar file found in the repository. This can be used locally, but updating to newer versions is much harder in build environments without using the Maven or Gradle implementation. Lastly, it is important to us that you pay attention to the version number when building your project with our library.
 
 Maven:
+
 ```XML
 <repositories>
   <repository>
@@ -33,6 +34,7 @@ Maven:
 ```
 
 Gradle:
+
 ```Java
 allprojects {
   repositories {
