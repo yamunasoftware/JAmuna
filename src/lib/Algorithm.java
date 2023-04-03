@@ -12,7 +12,7 @@ public class Algorithm {
 
   /* ALGORITHM SETUP METHODS */
 
-  // Constructor:
+  // Inputs Constructor:
   public Algorithm(int inputLength, double outputLength) {
     // Loop Variable:
     int turns = 0;
@@ -29,10 +29,24 @@ public class Algorithm {
     outputs = outputLength;
   }
 
-  // Constructor:
+  // Weights Constructor:
   public Algorithm(ArrayList<Double> newWeights) {
     // Sets the Weights:
     weights = newWeights;
+  }
+
+  // Object Constructor:
+  public Algorithm(Algorithm existing) {
+    try {
+      // Sets the Values:
+      weights = existing.getWeights();
+      outputs = existing.getOutputs();
+    }
+
+    catch (Exception e) {
+      // Prints Error:
+      e.printStackTrace();
+    }
   }
 
   // Constructor:
@@ -105,5 +119,17 @@ public class Algorithm {
   public void setWeights(ArrayList<Double> newWeights) throws Exception {
     // Sets the Weights:
     weights = newWeights;
+  }
+
+  // Get Outputs Method:
+  public double getOutputs() throws Exception {
+    // Returns the Outputs:
+    return outputs;
+  }
+
+  // Set Outputs Method:
+  public void setOutputs(double length) throws Exception {
+    // Sets the Value:
+    outputs = length;
   }
 }

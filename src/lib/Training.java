@@ -32,6 +32,25 @@ public class Training {
     mutationMax = mutMax;
   }
 
+  // Existing Constructor:
+  public Training(Algorithm existing, int nodes, int epochs, double mutMin, double mutMax) {
+    // Loop Setup:
+    loops = epochs;
+    int turns = 0;
+
+    // Loops through Array:
+    mainLoop: while (turns < nodes) {
+      // Adds New Algorithms:
+      algorithms.add(new Algorithm(existing));
+
+      turns++;
+    }
+
+    // Sets the Mutation Values:
+    mutationMin = mutMin;
+    mutationMax = mutMax;
+  }
+
   // Training Method:
   public Algorithm train(double inputs[][], double expected[]) throws Exception {
     // Loop Variable:
