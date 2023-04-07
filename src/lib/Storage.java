@@ -6,31 +6,34 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-@SuppressWarnings("unused")
 public class Storage {
   /* STORAGE METHODS */
+  
+  // Constructor:
+  public Storage() {}
 
   // Store Network Method:
-  public static void storeNetwork(Algorithm storeAlgorithm, String file) throws Exception {
+  public static void storeNetwork(Network store, String file) throws Exception {
     try {
       // Starts the Output Stream:
       FileOutputStream outputStream = new FileOutputStream(file);
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
       // Writes to File:
-      objectOutputStream.writeObject(storeAlgorithm);
+      objectOutputStream.writeObject(store);
       objectOutputStream.close();
     } 
 
     catch (IOException exception) {
-      // Do Nothing!
+      // Print:
+      exception.printStackTrace();
     }
   }
 
   // Get Network Method:
-  public static Algorithm getNetwork(String file) throws Exception {
+  public static Network getNetwork(String file) throws Exception {
     // Main Network:
-    Algorithm storeAlgorithm = new Algorithm();
+    Network store = new Network();
     
     try {
       // Starts the Input Stream:
@@ -38,15 +41,16 @@ public class Storage {
       ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
       // Reads the File:
-      storeAlgorithm = (Algorithm)(objectInputStream.readObject());
+      store = (Network)(objectInputStream.readObject());
       objectInputStream.close();
     }
 
     catch (IOException exception) {
-      // Do Nothing!
+      // Print:
+      exception.printStackTrace();
     }
 
     // Returns the Network:
-    return storeAlgorithm;
+    return store;
   }
 }

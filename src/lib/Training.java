@@ -1,178 +1,154 @@
 package lib;
 
 import java.util.ArrayList;
+import lib.Node.Activation;
 
 @SuppressWarnings("unused")
 public class Training {
-  /* TRAINING VARIABLES */
+  /* TRAINING SETUP */
 
-  // Training Algorithms Array:
-  private ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
+  // Training Variables:
+  private ArrayList<Network> networks = new ArrayList<Network>();
   private int loops = 0;
-  private double mutationMin = 0, mutationMax = 2;
+  private double min = 0, max = 0; 
+
+  // Constructor:
+  public Training(int inputs, int hidden[], int outputs, int children, int epochs, double min, double max, Activation function) {
+    // Setup:
+    loops = epochs;
+    this.min = min;
+    this.max = max;
+
+    // Loops through Children:
+    for (int i = 0; i < children; i++) {
+      // Adds to List:
+      networks.add(new Network(inputs, hidden, outputs, function));
+    }
+  }
 
   /* TRAINING METHODS */
 
-  // Constructor:
-  public Training(int inputLength, int nodes, int epochs, double outputLength, double mutMin, double mutMax) {
-    // Loop Setup:
-    loops = epochs;
-    int turns = 0;
-
-    // Loops through Array:
-    mainLoop: while (turns < nodes) {
-      // Adds New Algorithms:
-      algorithms.add(new Algorithm(inputLength, outputLength));
-
-      turns++;
-    }
-
-    // Sets the Mutation Values:
-    mutationMin = mutMin;
-    mutationMax = mutMax;
-  }
-
-  // Existing Constructor:
-  public Training(Algorithm existing, int nodes, int epochs, double mutMin, double mutMax) {
-    // Loop Setup:
-    loops = epochs;
-    int turns = 0;
-
-    // Loops through Array:
-    mainLoop: while (turns < nodes) {
-      // Adds New Algorithms:
-      algorithms.add(new Algorithm(existing));
-
-      turns++;
-    }
-
-    // Sets the Mutation Values:
-    mutationMin = mutMin;
-    mutationMax = mutMax;
-  }
-
   // Training Method:
-  public Algorithm train(double inputs[][], double expected[]) throws Exception {
+  public Network train(double inputs[][], double expected[][]) throws Exception {
     // Loop Variable:
-    Algorithm best = new Algorithm();
-    int turns = 0;
-
-    // Loops through Array:
-    mainLoop: while (turns < inputs.length) {
-      // Loop Variables:
-      int counts = 0;
-
-      // Loops through Array:
-      secondLoop: while (counts < loops) {
-        // Gets the Error:
-        ArrayList<Double> errors = getError(inputs[turns], expected[turns]);
+    Network best = new Network();
+    
+    // Loops through Training:
+    for (int i = 0; i < inputs.length; i++) {
+      for (int j = 0; j < loops; j++) {
+        // Error and Mutation:
+        ArrayList<Double> errors = getErrors(inputs[i], expected[i]);
         best = getBest(errors);
-
-        // Mutates:
         mutation(best);
-
-        counts++;
       }
-
-      turns++;
     }
 
     // Returns the Algorithm:
     return best;
   }
 
-  /* TRAINING UTILITY METHODS */
-
-  // Get Best Algorithm Method:
-  private Algorithm getBest(ArrayList<Double> errors) throws Exception {
-    // Checks the Case:
-    if (errors.size() == algorithms.size()) {
-      // Loop Variable:
-      int turns = 0;
-      int worstIndex = 0;
-      double worstValue = 0;
-
-      mainLoop: while (turns < errors.size()) {
-        // Checks the Case:
-        if (turns == 0) {
-          // Sets the Worsts:
-          worstIndex = turns;
-          worstValue = errors.get(turns);
-        }
-
-        else {
-          // Checks the Case:
-          if (errors.get(turns) < worstValue) {
-            // Sets the Worsts:
-            worstIndex = turns;
-            worstValue = errors.get(turns);
-          }
-        }
-
-        turns++;
-      }
-
-      // Returns the Best Algorithm:
-      return algorithms.get(worstIndex);
-    }
-
-    else {
-      // Returns Default Algorithm:
-      return new Algorithm();
-    }
-  }
-
   // Get Error Method:
-  private ArrayList<Double> getError(double inputs[], double expected) throws Exception {
-    // Loop Variables:
+  private ArrayList<Double> getErrors(double inputs[], double expected[]) throws Exception {
+    // Error List:
     ArrayList<Double> errors = new ArrayList<Double>();
-    int turns = 0;
-
-    // Loops through Array:
-    mainLoop: while (turns < algorithms.size()) {
+    
+    for (int i = 0; i < networks.size(); i++) {
       // Gets the Error:
-      errors.add(Math.abs(expected - algorithms.get(turns).getOutput(inputs)));
-
-      turns++;
+      errors.add(networks.get(i).getError(networks.get(i).runNetwork(inputs), expected));
     }
 
     // Returns the Errors:
     return errors;
   }
 
-  // Mutation Method:
-  private void mutation(Algorithm reference) throws Exception {
-    // Loop Variable:
-    int turns = 0;
+  // Get Best Algorithm Method:
+  private Network getBest(ArrayList<Double> errors) throws Exception {
+    // Checks the Case:
+    if (errors.size() == networks.size()) {
+      // Index Variables:
+      int worstIndex = 0;
+      double worstValue = 0;
 
-    // Loops through Array:
-    mainLoop: while (turns < algorithms.size()) {
-      // Checks the Case:
-      if (turns == 0) {
-        // Sets the Algorithm:
-        algorithms.set(turns, reference);
+      for (int i = 0; i < errors.size(); i++) {
+        // Checks the Case:
+        if (i == 0) {
+          // Sets the Worsts:
+          worstIndex = i;
+          worstValue = errors.get(i);
+        }
+
+        else {
+          // Checks the Case:
+          if (errors.get(i) < worstValue) {
+            // Sets the Worsts:
+            worstIndex = i;
+            worstValue = errors.get(i);
+          }
+        }
       }
 
-      else {
-        // Sets the Algorithm:
-        algorithms.set(turns, new Algorithm(reference.mutateWeights(mutationMin, mutationMax)));
-      }
+      // Returns the Best:
+      return networks.get(worstIndex);
+    }
 
-      turns++;
+    else {
+      // Returns Default:
+      return new Network();
     }
   }
 
-  /* TRAINING SETTINGS METHODS */
+  // Mutation Method:
+  private void mutation(Network reference) throws Exception {
+    // Mutation Loop:
+    for (int i = 0; i < networks.size(); i++) {
+      // Sets Network:
+      networks.set(i, reference);
 
-  // Set Mutation Minimum Method:
-  public void setMutationMin(double min) throws Exception {
-    // Sets the Value:
-    mutationMin = min;
+      // Checks the Case:
+      if (i != 0) {
+        // Sets the Mutation:
+        networks.get(i).mutateNetwork(min, max);
+      }
+    }
   }
 
-  // Set Mutation Maximum Method:
-  public void setMutationMax(double max) throws Exception {
-    // Sets the Value:
-    mutationMax = max;
+  /* TRAINING UTILITY METHODS */
+
+  // Get Loops Method:
+  public int getLoops() throws Exception {
+    // Returns:
+    return loops;
+  }
+
+  // Set Loops Method:
+  public void setLoops(int epochs) throws Exception {
+    // Sets:
+    loops = epochs; 
+  }
+
+  // Get Mutation Data Method:
+  public double[] getMutationData() throws Exception {
+    // Returns:
+    double data[] = {min, max};
+    return data;
+  }
+
+  // Set Mutation Data Method:
+  public void setMutationData(double min, double max) throws Exception {
+    // Sets:
+    this.min = min;
+    this.max = max;
+  }
+
+  // Get Networks Method:
+  public ArrayList<Network> getNetworks() throws Exception {
+    // Returns:
+    return networks;
+  }
+
+  // Set Networks Method:
+  public void setNetworks(ArrayList<Network> networks) throws Exception {
+    // Sets:
+    this.networks = networks;
   }
 }
