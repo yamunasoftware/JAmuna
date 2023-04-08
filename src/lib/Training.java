@@ -13,7 +13,8 @@ public class Training {
   private double min = 0, max = 0; 
 
   // Constructor:
-  public Training(int inputs, int hidden[], int outputs, int children, int epochs, double min, double max, Activation function) {
+  public Training(int inputs, int hidden[], int outputs, int children, int epochs, double min, double max, double bias, 
+    Activation function) {
     // Setup:
     loops = epochs;
     this.min = min;
@@ -22,7 +23,7 @@ public class Training {
     // Loops through Children:
     for (int i = 0; i < children; i++) {
       // Adds to List:
-      networks.add(new Network(inputs, hidden, outputs, function));
+      networks.add(new Network(inputs, hidden, outputs, bias, function));
     }
   }
 

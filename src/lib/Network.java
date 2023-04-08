@@ -15,7 +15,7 @@ public class Network {
   public Network() {}
   
   // Constructor:
-  public Network(int inputs, int hidden[], int outputs, Activation function) {
+  public Network(int inputs, int hidden[], int outputs, double bias, Activation function) {
     // Last Hidden Layer:
     int last = 0;
     
@@ -29,12 +29,12 @@ public class Network {
         // Checks the Case:
         if (i == 0) {
           // Sets the Node:
-          layer.add(new Node(inputs, function));
+          layer.add(new Node(inputs, bias, function));
         }
 
         else {
           // Sets the Node:
-          layer.add(new Node(hidden[i-1], function));
+          layer.add(new Node(hidden[i-1], bias, function));
         }
       }
 
@@ -46,7 +46,7 @@ public class Network {
     // Loops through Outputs:
     for (int i = 0; i < outputs; i++) {
       // Adds to the List:
-      outputLayer.add(new Node(last, function));
+      outputLayer.add(new Node(last, bias, function));
     }
   }
 

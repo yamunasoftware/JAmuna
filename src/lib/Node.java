@@ -14,16 +14,20 @@ public class Node {
 
   // Weights List:
   private ArrayList<Double> weights = new ArrayList<Double>();
+  private double bias = 0;
   private Activation function = Activation.RELU;
   
   // Constructor:
-  public Node(int inputs, Activation function) {
+  public Node(int inputs, double bias, Activation function) {
+    // Setup:
+    this.function = function;
+    this.bias = bias;
+    
     // Loops through Inputs:
     for (int i = 0; i < inputs; i++) {
       // Sets the Weight:
       weights.add(Math.random());
     }
-    this.function = function;
   }
 
   /* NODE METHODS */
@@ -47,12 +51,12 @@ public class Node {
       // Checks the Case:
       if (function == Activation.RELU) {
         // Returns the Output:
-        return relu(summation);
+        return relu((summation + bias));
       }
 
       else {
         // Returns the Output:
-        return sigmoid(summation);
+        return sigmoid((summation + bias));
       }
     }
 
@@ -72,6 +76,7 @@ public class Node {
     mainLoop: while (turns < weights.size()) {
       // Adds to the New Weights:
       double mutagen = ((Math.random() * (max - min)) + min);
+      bias *= ((Math.random() * (max - min)) + min);
       newWeights.add(turns, (weights.get(turns) * mutagen));
       
       turns++;
