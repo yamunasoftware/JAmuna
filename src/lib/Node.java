@@ -6,22 +6,14 @@ import java.util.ArrayList;
 public class Node {
   /* NODE SETUP */
 
-  // Activation Enum:
-  public enum Activation {
-    SIGMOID,
-    RELU
-  }
-
   // Weights List:
   private ArrayList<Double> weights = new ArrayList<Double>();
   private double bias = 0;
-  private Activation function = Activation.RELU;
   
   // Constructor:
-  public Node(int inputs, double bias, Activation function) {
+  public Node(int inputs) {
     // Setup:
-    this.function = function;
-    this.bias = bias;
+    this.bias = Math.random();
     
     // Loops through Inputs:
     for (int i = 0; i < inputs; i++) {
@@ -48,16 +40,8 @@ public class Node {
         turns++;
       }
 
-      // Checks the Case:
-      if (function == Activation.RELU) {
-        // Returns the Output:
-        return relu((summation + bias));
-      }
-
-      else {
-        // Returns the Output:
-        return sigmoid((summation + bias));
-      }
+      // Returns the Output:
+      return sigmoid((summation += bias));
     }
 
     else {
@@ -66,38 +50,10 @@ public class Node {
     }
   }
 
-  // Mutate Weights Method:
-  public ArrayList<Double> mutateWeights(double min, double max) throws Exception {
-    // Loop Variables:
-    ArrayList<Double> newWeights = new ArrayList<Double>();
-    int turns = 0;
-
-    // Loops through Array:
-    mainLoop: while (turns < weights.size()) {
-      // Adds to the New Weights:
-      double mutagen = ((Math.random() * (max - min)) + min);
-      bias *= ((Math.random() * (max - min)) + min);
-      newWeights.add(turns, (weights.get(turns) * mutagen));
-      
-      turns++;
-    }
-
-    // Returns the New Weights:
-    return newWeights;
-  }
-
-  /* ACTIVATION FUNCTIONS */
-
   // Sigmoid Method:
   private double sigmoid(double input) throws Exception {
     // Sigmoid Activation:
     return 1 / (1 + Math.pow(Math.E, -input));
-  }
-
-  // ReLU Method:
-  private double relu(double input) throws Exception {
-    // ReLU Activation:
-    return Math.max(0, input);
   }
 
   /* NODE UTILITY METHODS */

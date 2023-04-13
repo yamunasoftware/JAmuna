@@ -3,8 +3,6 @@ package lib;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import lib.Node.Activation;
-
 @SuppressWarnings("unused")
 public class Tests {
   /* TEST VARIABLES */
@@ -22,9 +20,7 @@ public class Tests {
 
   // Training Setup Variables:
   private static int hiddenLayers[] = {5, 7, 5};
-  private static int inputLength = inputs[0].length, outputLength = outputs[0].length, children = 100000, epochs = 1;
-  private static double min = 0.9, max = 1.1, bias = 0;
-  private static Activation function = Activation.RELU;
+  private static int epochs = 5;
 
   /* TEST METHODS */
 
@@ -35,8 +31,8 @@ public class Tests {
   // Test Training Method:
   public static ArrayList<Double> testTraining() throws Exception {
     // Gets Output:
-    Training training = new Training(inputLength, hiddenLayers, outputLength, children, epochs, min, max, bias, function);
-    Network best = training.train(inputs, outputs);
-    return best.runNetwork(testInputs);
+    Training training = new Training(inputs[0].length, hiddenLayers, outputs[0].length, epochs);
+    training.train(inputs, outputs);
+    return training.getNetwork().runNetwork(testInputs);
   }
 }

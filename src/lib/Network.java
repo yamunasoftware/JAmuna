@@ -1,7 +1,6 @@
 package lib;
 
 import java.util.ArrayList;
-import lib.Node.Activation;
 
 @SuppressWarnings("unused")
 public class Network {
@@ -15,7 +14,7 @@ public class Network {
   public Network() {}
   
   // Constructor:
-  public Network(int inputs, int hidden[], int outputs, double bias, Activation function) {
+  public Network(int inputs, int hidden[], int outputs) {
     // Last Hidden Layer:
     int last = 0;
     
@@ -29,12 +28,12 @@ public class Network {
         // Checks the Case:
         if (i == 0) {
           // Sets the Node:
-          layer.add(new Node(inputs, bias, function));
+          layer.add(new Node(inputs));
         }
 
         else {
           // Sets the Node:
-          layer.add(new Node(hidden[i-1], bias, function));
+          layer.add(new Node(hidden[i-1]));
         }
       }
 
@@ -46,7 +45,7 @@ public class Network {
     // Loops through Outputs:
     for (int i = 0; i < outputs; i++) {
       // Adds to the List:
-      outputLayer.add(new Node(last, bias, function));
+      outputLayer.add(new Node(last));
     }
   }
 
@@ -77,23 +76,6 @@ public class Network {
     return outputs;
   }
 
-  // Mutate Network Method:
-  public void mutateNetwork(double min, double max) throws Exception {
-    // Mutates Hidden Layers:
-    for (int i = 0; i < hiddenLayers.size(); i++) {
-      for (int j = 0; j < hiddenLayers.get(i).size(); j++) {
-        // Mutates:
-        hiddenLayers.get(i).get(j).mutateWeights(min, max);
-      }
-    }
-
-    // Mutates Outputs:
-    for (int i = 0; i < outputLayer.size(); i++) {
-      // Mutates:
-      outputLayer.get(i).mutateWeights(min, max);
-    }
-  }
-
   // Get Error Method:
   public double getError(ArrayList<Double> outputs, double expected[]) throws Exception {
     // Error Variable:
@@ -115,6 +97,12 @@ public class Network {
       // Returns the Error:
       return error;
     }
+  }
+
+  // Transfer Derivative Method:
+  private double transferDerivative(double output) throws Exception {
+    // Returns:
+    return output * (1-output);
   }
 
   /* NETWORK LAYER METHODS */
