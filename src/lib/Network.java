@@ -76,27 +76,32 @@ public class Network {
     return outputs;
   }
 
-  // Get Error Method:
-  public double getError(ArrayList<Double> outputs, double expected[]) throws Exception {
-    // Error Variable:
-    double error = 0;
+  // Backpropagation Method:
+  public void backpropagate() throws Exception {
     
-    // Checks the Case:
-    if (expected.length == outputs.size()) {
-      // Loops through Outputs:
-      for (int i = 0; i < outputs.size(); i++) {
-        // Sums:
-        error += Math.abs(expected[i] - outputs.get(i));
-      }
+  }
 
-      // Returns the Error:
-      return error;
+  /* NETWORK HELPER METHODS */
+
+  // Get Hidden Error Method:
+  private double getHiddenError(double outputError, double weight, double output) throws Exception {
+    // Returns the Error:
+    return (weight * outputError) * transferDerivative(output);
+  }
+
+  // Get Output Errors Method:
+  private double[] getOutputErrors(double outputs[], double expected[]) throws Exception {
+    // Error Array:
+    double errors[] = new double[outputs.length];
+
+    // Loops through Array:
+    for (int i = 0; i < errors.length; i++) {
+      // Sets the Value:
+      errors[i] = (outputs[i] - expected[i]) * transferDerivative(outputs[i]);
     }
 
-    else {
-      // Returns the Error:
-      return error;
-    }
+    // Returns the Errors:
+    return errors;
   }
 
   // Transfer Derivative Method:

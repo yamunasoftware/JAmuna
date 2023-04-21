@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+@SuppressWarnings("unused")
 public class Storage {
   /* STORAGE METHODS */
   
