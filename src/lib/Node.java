@@ -8,7 +8,7 @@ public class Node {
 
   // Weights List:
   private ArrayList<Double> weights = new ArrayList<Double>();
-  private double bias = 0, delta = 0;
+  private double bias = 0, delta = 0, output = 0;
   
   // Constructor:
   public Node(int inputs) {
@@ -41,7 +41,8 @@ public class Node {
       }
 
       // Returns the Output:
-      return sigmoid((summation += bias));
+      output = sigmoid((summation += bias));
+      return output;
     }
 
     else {
@@ -76,6 +77,12 @@ public class Node {
     return delta;
   }
 
+  // Get Output Method:
+  public double getOutput() throws Exception {
+    // Returns the Output:
+    return output;
+  }
+
   // Set Weights Method:
   public void setWeights(ArrayList<Double> newWeights) throws Exception {
     // Sets the Weights:
@@ -92,5 +99,11 @@ public class Node {
   public void setDelta(double newDelta) throws Exception {
     // Sets the Bias:
     delta = newDelta;
+  }
+
+  // Set Output Method:
+  public void setOutput(double newOutput) throws Exception {
+    // Sets the Output:
+    output = newOutput;
   }
 }
