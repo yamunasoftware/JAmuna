@@ -25,11 +25,11 @@ public class Tests {
   /* TEST METHODS */
 
   public static void main(String args[]) throws Exception {
-    System.out.println(Arrays.toString(testTraining().toArray()));
+    System.out.println(Arrays.toString(testAlgorithm().toArray()));
   }
 
-  // Test Training Method:
-  public static ArrayList<Double> testTraining() throws Exception {
+  // Test Algorithm Method:
+  public static ArrayList<Double> testAlgorithm() throws Exception {
     // Gets Output:
     Training training = new Training(inputs[0].length, hiddenLayers, outputs[0].length, epochs);
     training.train(inputs, outputs);

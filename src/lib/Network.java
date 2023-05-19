@@ -76,13 +76,21 @@ public class Network {
     return outputs;
   }
 
-  // Backpropagation Method:
-  public void backpropagate(ArrayList<Double> outputs, double expected[]) throws Exception {
+  // Back Propagation Method:
+  public void backPropagate(ArrayList<Double> outputs, double expected[]) throws Exception {
     // Gets and Sets the Output Errors:
     ArrayList<Double> outputErrors = getOutputErrors(outputs, expected);
     for (int i = 0; i < outputLayer.size(); i++) {
       // Sets the Delta:
       outputLayer.get(i).setDelta(outputErrors.get(i));
+    }
+
+    // Gets and Sets the Hidden Errors:
+    for (int i = 0; i < hiddenLayers.size(); i++) {
+      for (int j = 0; j < hiddenLayers.get(i).size(); j++) {
+        // Sets the Delta:
+        
+      }
     }
   }
 

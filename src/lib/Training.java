@@ -22,11 +22,16 @@ public class Training {
   // Training Method:
   public void train(double inputs[][], double expected[][]) throws Exception {
     // Loops through Training:
-    for (int i = 0; i < inputs.length; i++) {
-      for (int j = 0; j < loops; j++) {
-        
+    for (int i = 0; i < loops; i++) {
+      for (int j = 0; j < inputs.length; j++) {
+      
       }
     }
+  }
+
+  // Update Weights Method:
+  private void updateWeights() throws Exception {
+
   }
 
   /* TRAINING UTILITY METHODS */
