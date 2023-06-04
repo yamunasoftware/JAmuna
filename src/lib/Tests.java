@@ -17,14 +17,14 @@ public class Tests {
 
   // Training Setup Variables:
   private static int hiddenLayers[] = {2};
-  private static int epochs = 5;
+  private static int epochs = 1000;
   private static double learningRate = 0.5;
 
   /* TEST METHODS */
 
   // Test Algorithm Method:
   public static double[] testAlgorithm() throws Exception {
-    Network network = new Network(inputs[0].length, hiddenLayers, outputs[0].length, learningRate);
+    Network network = new Network(inputs[0].length, hiddenLayers, outputs[0].length, learningRate, epochs);
     network.train(inputs, outputs);
     return network.run(testInputs);
   }

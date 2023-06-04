@@ -2,7 +2,7 @@ package lib;
 
 public class Network {
   // Network Setup Variables:
-  private int inputSize, outputSize;
+  private int inputSize, outputSize, epochs;
   private double learningRate;
   private int[] hiddenSizes;
   private double[] outputLayer;
@@ -15,11 +15,12 @@ public class Network {
   public Network() {}
 
   // Main Constructor:
-  public Network(int inputSize, int[] hiddenSizes, int outputSize, double learningRate) {
+  public Network(int inputSize, int[] hiddenSizes, int outputSize, double learningRate, int epochs) {
     this.inputSize = inputSize;
     this.hiddenSizes = hiddenSizes;
     this.outputSize = outputSize;
     this.learningRate = learningRate;
+    this.epochs = epochs;
     this.weights = new double[hiddenSizes.length + 1][][];
     this.biases = new double[hiddenSizes.length + 1][];
     this.hiddenLayers = new double[hiddenSizes.length][];
@@ -28,7 +29,6 @@ public class Network {
   }
 
   public void train(double inputs[][], double targets[][]) {
-    int epochs = 1000;
     for (int i = 0; i < epochs; i++) {
       for (int j = 0; j < inputs.length; j++) {
         double[] input = inputs[j];

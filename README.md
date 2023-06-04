@@ -4,11 +4,7 @@ Java Supervised Machine Learning Library Using Genetic Algorithms to Learn
 
 ## Overview
 
-The JAmuna library is a machine learning library that is built from using neural networks to get better results from you testing. The library uses a special method to learn where it creates multiple neural networks and evolves to a better and better network with added data. The more that the data is aggregated and used to train this system, the better the resulting network will be. This method is a little more computationally expensive when compared to the traditional Back-Propagation Learning; however, the resulting training process is much easier to visualize and achieve great performance as well. The library is designed to handle classification and class-based machine learning tasks, which is perfect for many applications of the technology.
-
-The key is to keep all of your inputs as arrays with the same length to avoid any bugs during the testing process, and for further details you can see our "Tests.java" class for how to train and run the network. The library is modular and each piece of the library combines into a bigger whole, which is only possible because of the segmented Object-Oriented approach that we took to build this library. The "Storage.java" class is used to save and open stored networks that are trained and used for future running or training.
-
-The main algorithmic methods can be found in the "Algorithm.java" class, which is the main code for the running of the classification system. The other class is the "Training.java" class includes the methods for the training and learning aspects of the library. The class handles the physical data processing feature of the library, which makes the development and testing process much easier.
+The JAmuna library is a machine learning library that is built from using neural networks to get better results from you testing. This is an implementation on the traditional style of using Gradient Descent with Back Propagation to train a neural network. This library also acts as a framework for being able to create neural networks of any size to use methods like deep learning to be able to do more complex tasks.
 
 ## Installation
 
