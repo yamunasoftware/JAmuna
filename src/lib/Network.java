@@ -1,191 +1,177 @@
 package lib;
 
-import java.util.ArrayList;
-
-@SuppressWarnings("unused")
 public class Network {
-  /* NETWORK SETUP */
+  // Network Setup Variables:
+  private int inputSize, outputSize;
+  private double learningRate;
+  private int[] hiddenSizes;
+  private double[] outputLayer;
+  private double[][][] weights;
+  private double[][] biases, hiddenLayers;
 
-  // Layer Variables:
-  private ArrayList<Node> outputLayer = new ArrayList<Node>();
-  private ArrayList<ArrayList<Node>> hiddenLayers = new ArrayList<ArrayList<Node>>();
-  
+  /* EXTERNAL METHODS */
+
   // Default Constructor:
   public Network() {}
-  
-  // Constructor:
-  public Network(int inputs, int hidden[], int outputs) {
-    // Last Hidden Layer:
-    int last = 0;
-    
-    // Loops through Hidden Layers:
-    for (int i = 0; i < hidden.length; i++) {
-      // Layer Variable:
-      ArrayList<Node> layer = new ArrayList<Node>();
 
-      // Loops through Layer:
-      for (int j = 0; j < hidden[i]; j++) {
-        // Checks the Case:
-        if (i == 0) {
-          // Sets the Node:
-          layer.add(new Node(inputs));
-        }
-
-        else {
-          // Sets the Node:
-          layer.add(new Node(hidden[i-1]));
-        }
-      }
-
-      // Sets the Values:
-      hiddenLayers.add(layer);
-      last = hidden[i];
-    }
-
-    // Loops through Outputs:
-    for (int i = 0; i < outputs; i++) {
-      // Adds to the List:
-      outputLayer.add(new Node(last));
-    }
+  // Main Constructor:
+  public Network(int inputSize, int[] hiddenSizes, int outputSize, double learningRate) {
+    this.inputSize = inputSize;
+    this.hiddenSizes = hiddenSizes;
+    this.outputSize = outputSize;
+    this.learningRate = learningRate;
+    this.weights = new double[hiddenSizes.length + 1][][];
+    this.biases = new double[hiddenSizes.length + 1][];
+    this.hiddenLayers = new double[hiddenSizes.length][];
+    this.outputLayer = new double[outputSize];
+    initialize();
   }
 
-  /* NETWORK METHODS */
-
-  // Run Network Method:
-  public ArrayList<Double> runNetwork(double inputs[]) throws Exception {
-    // Layer Lists:
-    ArrayList<Double> outputs = new ArrayList<Double>();
-    ArrayList<Double> layerInput = new ArrayList<Double>();
-    ArrayList<Double> layerOutput = new ArrayList<Double>();
-      
-    // Converts Inputs:
-    for (int i = 0; i < inputs.length; i++) {
-      // Adds to the Layers:
-      layerInput.add(inputs[i]);
-    }
-      
-    // Loops through Layers:
-    for (int i = 0; i < hiddenLayers.size(); i++) {
-      // Gets the Layer Output:
-      layerOutput = getHiddenLayerOutputs(layerInput, i);
-      layerInput = layerOutput;
-    }
-
-    // Return the Outputs:
-    outputs = getOutputLayerOutputs(layerOutput);
-    return outputs;
-  }
-
-  // Back Propagation Method:
-  public void backPropagate(ArrayList<Double> outputs, double expected[]) throws Exception {
-    // Gets and Sets the Output Errors:
-    ArrayList<Double> outputErrors = getOutputErrors(outputs, expected);
-    for (int i = 0; i < outputLayer.size(); i++) {
-      // Sets the Delta:
-      outputLayer.get(i).setDelta(outputErrors.get(i));
-    }
-
-    // Gets and Sets the Hidden Errors:
-    for (int i = 0; i < hiddenLayers.size(); i++) {
-      for (int j = 0; j < hiddenLayers.get(i).size(); j++) {
-        // Sets the Delta:
-        
+  public void train(double inputs[][], double targets[][]) {
+    int epochs = 1000;
+    for (int i = 0; i < epochs; i++) {
+      for (int j = 0; j < inputs.length; j++) {
+        double[] input = inputs[j];
+        double[] target = targets[j];
+        forwardPropagation(input);
+        backwardPropagation(input, target);
       }
     }
   }
 
-  /* NETWORK HELPER METHODS */
-
-  // Get Output Errors Method:
-  private ArrayList<Double> getOutputErrors(ArrayList<Double> outputs, double expected[]) throws Exception {
-    // Error List:
-    ArrayList<Double> errors = new ArrayList<Double>();
-
-    // Loops through Array:
-    for (int i = 0; i < outputs.size(); i++) {
-      // Sets the Value:
-      errors.add((outputs.get(i) - expected[i]) * transferDerivative(outputs.get(i)));
-    }
-
-    // Returns the Errors:
-    return errors;
+  public double[] run(double[] inputs) {
+    return forwardPropagation(inputs);
   }
 
-  // Transfer Derivative Method:
-  private double transferDerivative(double output) throws Exception {
-    // Returns:
-    return output * (1-output);
+  /* INTERNAL METHODS */
+
+  private void initialize() {
+    // Initialize weights and biases for the first hidden layer
+    weights[0] = new double[inputSize][hiddenSizes[0]];
+    biases[0] = new double[hiddenSizes[0]];
+    for (int i = 0; i < inputSize; i++) {
+      for (int j = 0; j < hiddenSizes[0]; j++) {
+        weights[0][i][j] = Math.random();
+      }
+    }
+    for (int j = 0; j < hiddenSizes[0]; j++) {
+      biases[0][j] = Math.random();
+    }
+
+    // Initialize weights and biases for the subsequent hidden layers
+    for (int k = 1; k < hiddenSizes.length; k++) {
+      weights[k] = new double[hiddenSizes[k - 1]][hiddenSizes[k]];
+      biases[k] = new double[hiddenSizes[k]];
+      for (int i = 0; i < hiddenSizes[k - 1]; i++) {
+        for (int j = 0; j < hiddenSizes[k]; j++) {
+          weights[k][i][j] = Math.random();
+        }
+      }
+      for (int j = 0; j < hiddenSizes[k]; j++) {
+        biases[k][j] = Math.random();
+      }
+    }
+
+    // Initialize weights and biases for the output layer
+    weights[hiddenSizes.length] = new double[hiddenSizes[hiddenSizes.length - 1]][outputSize];
+    biases[hiddenSizes.length] = new double[outputSize];
+    for (int i = 0; i < hiddenSizes[hiddenSizes.length - 1]; i++) {
+      for (int j = 0; j < outputSize; j++) {
+        weights[hiddenSizes.length][i][j] = Math.random();
+      }
+    }
+    for (int j = 0; j < outputSize; j++) {
+      biases[hiddenSizes.length][j] = Math.random();
+    }
   }
 
-  /* NETWORK LAYER METHODS */
-
-  // Get Hidden Layer Outputs Method:
-  private ArrayList<Double> getHiddenLayerOutputs(ArrayList<Double> inputs, int index) throws Exception {
-    // Outputs List:
-    ArrayList<Double> outputs = new ArrayList<Double>();
-    double local[] = new double[inputs.size()];
-
-    // Loops through Inputs:
-    for (int i = 0; i < inputs.size(); i++) {
-      // Sets the Local:
-      local[i] = inputs.get(i);
-    }
-    
-    // Loops through Layer:
-    for (int i = 0; i < hiddenLayers.get(index).size(); i++) {
-      // Gets the Outputs:
-      outputs.add(hiddenLayers.get(index).get(i).getOutput(local));
-    }
-
-    // Returns the Outputs:
-    return outputs;
-  }
-
-  // Get Output Layer Outputs Method:
-  private ArrayList<Double> getOutputLayerOutputs(ArrayList<Double> inputs) throws Exception {
-    // Outputs List:
-    ArrayList<Double> outputs = new ArrayList<Double>();
-    double local[] = new double[inputs.size()];
-
-    // Loops through Inputs:
-    for (int i = 0; i < inputs.size(); i++) {
-      // Sets the Local:
-      local[i] = inputs.get(i);
+  private double[] forwardPropagation(double[] inputs) {
+    // Calculate values of the hidden layers
+    for (int k = 0; k < hiddenSizes.length; k++) {
+      hiddenLayers[k] = new double[hiddenSizes[k]];
+      if (k == 0) {
+        for (int j = 0; j < hiddenSizes[k]; j++) {
+          double sum = biases[k][j];
+          for (int i = 0; i < inputSize; i++) {
+            sum += inputs[i] * weights[k][i][j];
+          }
+          hiddenLayers[k][j] = sigmoid(sum);
+        }
+      } 
+      
+      else {
+        for (int j = 0; j < hiddenSizes[k]; j++) {
+          double sum = biases[k][j];
+          for (int i = 0; i < hiddenSizes[k - 1]; i++) {
+            sum += hiddenLayers[k - 1][i] * weights[k][i][j];
+          }
+          hiddenLayers[k][j] = sigmoid(sum);
+        }
+      }
     }
 
-    // Loops through Layer:
-    for (int i = 0; i < outputLayer.size(); i++) {
-      // Gets the Outputs:
-      outputs.add(outputLayer.get(i).getOutput(local));
+    // Calculate values of the output layer
+    for (int j = 0; j < outputSize; j++) {
+      double sum = biases[hiddenSizes.length][j];
+      for (int i = 0; i < hiddenSizes[hiddenSizes.length - 1]; i++) {
+        sum += hiddenLayers[hiddenSizes.length - 1][i] * weights[hiddenSizes.length][i][j];
+      }
+      outputLayer[j] = sigmoid(sum);
     }
 
-    // Returns the Outputs:
-    return outputs;
-  }
-
-  /* NETWORK UTILITY METHODS */
-
-  // Get Output Layer Method:
-  public ArrayList<Node> getOutputLayer() throws Exception {
-    // Returns:
     return outputLayer;
   }
 
-  // Set Output Layer Method:
-  public void setOutputLayer(ArrayList<Node> layer) throws Exception {
-    // Sets:
-    outputLayer = layer;
+  private void backwardPropagation(double[] inputs, double[] targets) {
+    double[][] outputErrors = new double[hiddenSizes.length + 1][];
+    double[][] hiddenErrors = new double[hiddenSizes.length][];
+
+    // Calculate errors for output layer
+    outputErrors[hiddenSizes.length] = new double[outputSize];
+    for (int j = 0; j < outputSize; j++) {
+      double output = outputLayer[j];
+      outputErrors[hiddenSizes.length][j] = (targets[j] - output) * sigmoidDerivative(output);
+    }
+
+    // Calculate errors for hidden layers
+    for (int k = hiddenSizes.length - 1; k >= 0; k--) {
+      hiddenErrors[k] = new double[hiddenSizes[k]];
+      for (int j = 0; j < hiddenSizes[k]; j++) {
+        double error = 0.0;
+        if (k == hiddenSizes.length - 1) {
+          for (int i = 0; i < outputSize; i++) {
+            error += outputErrors[k + 1][i] * weights[k + 1][j][i];
+          }
+        } else {
+          for (int i = 0; i < hiddenSizes[k + 1]; i++) {
+            error += hiddenErrors[k + 1][i] * weights[k + 1][j][i];
+          }
+        }
+        hiddenErrors[k][j] = error * sigmoidDerivative(hiddenLayers[k][j]);
+      }
+    }
+
+    // Update weights and biases
+    for (int k = 0; k < hiddenSizes.length + 1; k++) {
+      for (int i = 0; i < (k == 0 ? inputSize : hiddenSizes[k - 1]); i++) {
+        for (int j = 0; j < (k == hiddenSizes.length ? outputSize : hiddenSizes[k]); j++) {
+          double gradient = (k == hiddenSizes.length ? outputErrors[k][j] : hiddenErrors[k][j]) *
+              (k == 0 ? inputs[i] : hiddenLayers[k - 1][i]);
+          weights[k][i][j] += learningRate * gradient;
+        }
+      }
+      for (int j = 0; j < (k == hiddenSizes.length ? outputSize : hiddenSizes[k]); j++) {
+        double gradient = (k == hiddenSizes.length ? outputErrors[k][j] : hiddenErrors[k][j]);
+        biases[k][j] += learningRate * gradient;
+      }
+    }
   }
 
-  // Get Hidden Layers Method:
-  public ArrayList<ArrayList<Node>> getHiddenLayers() throws Exception {
-    // Returns:
-    return hiddenLayers;
+  private double sigmoid(double x) {
+    return 1 / (1 + Math.exp(-x));
   }
 
-  // Set Hidden Layers Method:
-  public void setHiddenLayers(ArrayList<ArrayList<Node>> layers) throws Exception {
-    // Sets:
-    hiddenLayers = layers;
+  private double sigmoidDerivative(double x) {
+    return sigmoid(x) * (1 - sigmoid(x));
   }
 }
