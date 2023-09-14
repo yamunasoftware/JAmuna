@@ -5,6 +5,8 @@ public class Network {
   private int inputSize, outputSize, epochs;
   private double learningRate;
   private int[] hiddenSizes;
+
+  // Network Arrays:
   private double[] outputLayer;
   private double[][][] weights;
   private double[][] biases, hiddenLayers;
@@ -16,6 +18,7 @@ public class Network {
 
   // Main Constructor:
   public Network(int inputSize, int[] hiddenSizes, int outputSize, double learningRate, int epochs) {
+    // Sets the Constructor Values:
     this.inputSize = inputSize;
     this.hiddenSizes = hiddenSizes;
     this.outputSize = outputSize;
@@ -28,9 +31,12 @@ public class Network {
     initialize();
   }
 
+  // Train Network Method:
   public void train(double inputs[][], double targets[][]) {
+    // Loops through Epochs:
     for (int i = 0; i < epochs; i++) {
       for (int j = 0; j < inputs.length; j++) {
+        // Training Process:
         double[] input = inputs[j];
         double[] target = targets[j];
         forwardPropagation(input);
@@ -39,14 +45,17 @@ public class Network {
     }
   }
 
+  // Runs the Network:
   public double[] run(double[] inputs) {
+    // Returns Output:
     return forwardPropagation(inputs);
   }
 
   /* INTERNAL METHODS */
 
+  // Initialize Network Method:
   private void initialize() {
-    // Initialize weights and biases for the first hidden layer
+    // Input Layer Initialization:
     weights[0] = new double[inputSize][hiddenSizes[0]];
     biases[0] = new double[hiddenSizes[0]];
     for (int i = 0; i < inputSize; i++) {
@@ -58,7 +67,7 @@ public class Network {
       biases[0][j] = Math.random();
     }
 
-    // Initialize weights and biases for the subsequent hidden layers
+    // Hidden Layers Loop:
     for (int k = 1; k < hiddenSizes.length; k++) {
       weights[k] = new double[hiddenSizes[k - 1]][hiddenSizes[k]];
       biases[k] = new double[hiddenSizes[k]];
@@ -72,7 +81,7 @@ public class Network {
       }
     }
 
-    // Initialize weights and biases for the output layer
+    // Output Layer Initialization:
     weights[hiddenSizes.length] = new double[hiddenSizes[hiddenSizes.length - 1]][outputSize];
     biases[hiddenSizes.length] = new double[outputSize];
     for (int i = 0; i < hiddenSizes[hiddenSizes.length - 1]; i++) {
@@ -85,8 +94,8 @@ public class Network {
     }
   }
 
+  // Forward Propagation Method:
   private double[] forwardPropagation(double[] inputs) {
-    // Calculate values of the hidden layers
     for (int k = 0; k < hiddenSizes.length; k++) {
       hiddenLayers[k] = new double[hiddenSizes[k]];
       if (k == 0) {
@@ -110,7 +119,6 @@ public class Network {
       }
     }
 
-    // Calculate values of the output layer
     for (int j = 0; j < outputSize; j++) {
       double sum = biases[hiddenSizes.length][j];
       for (int i = 0; i < hiddenSizes[hiddenSizes.length - 1]; i++) {
@@ -122,18 +130,17 @@ public class Network {
     return outputLayer;
   }
 
+  // Back Propagation Method:
   private void backwardPropagation(double[] inputs, double[] targets) {
     double[][] outputErrors = new double[hiddenSizes.length + 1][];
     double[][] hiddenErrors = new double[hiddenSizes.length][];
 
-    // Calculate errors for output layer
     outputErrors[hiddenSizes.length] = new double[outputSize];
     for (int j = 0; j < outputSize; j++) {
       double output = outputLayer[j];
       outputErrors[hiddenSizes.length][j] = (targets[j] - output) * sigmoidDerivative(output);
     }
 
-    // Calculate errors for hidden layers
     for (int k = hiddenSizes.length - 1; k >= 0; k--) {
       hiddenErrors[k] = new double[hiddenSizes[k]];
       for (int j = 0; j < hiddenSizes[k]; j++) {
@@ -151,7 +158,6 @@ public class Network {
       }
     }
 
-    // Update weights and biases
     for (int k = 0; k < hiddenSizes.length + 1; k++) {
       for (int i = 0; i < (k == 0 ? inputSize : hiddenSizes[k - 1]); i++) {
         for (int j = 0; j < (k == hiddenSizes.length ? outputSize : hiddenSizes[k]); j++) {
@@ -167,11 +173,15 @@ public class Network {
     }
   }
 
+  // Sigmoid Activation Function:
   private double sigmoid(double x) {
+    // Returns Activation:
     return 1 / (1 + Math.exp(-x));
   }
 
+  // Sigmoid Activation Derivative Function:
   private double sigmoidDerivative(double x) {
+    // Returns Derivative:
     return sigmoid(x) * (1 - sigmoid(x));
   }
 }

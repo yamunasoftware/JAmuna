@@ -22,10 +22,12 @@ public class Tests {
 
   /* TEST METHODS */
 
-  // Test Algorithm Method:
-  public static double[] testAlgorithm() throws Exception {
+  // Test Network Method:
+  public static double[][] testNetwork() throws Exception {
     Network network = new Network(inputs[0].length, hiddenLayers, outputs[0].length, learningRate, epochs);
     network.train(inputs, outputs);
-    return network.run(testInputs);
+    Utilities utilities = new Utilities();
+    double [][] results = {network.run(testInputs), utilities.stepOutputs(network.run(testInputs))};
+    return results;
   }
 }
