@@ -1,6 +1,6 @@
 # JAmuna
 
-Java Supervised Machine Learning Library Using Genetic Algorithms to Learn
+Java Supervised Machine Learning Library Using Neural Networks
 
 ## Overview
 
