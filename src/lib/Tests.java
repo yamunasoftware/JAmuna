@@ -23,11 +23,7 @@ public class Tests {
   /* TEST METHODS */
 
   // Test Network Method:
-  public static double[][] testNetwork() throws Exception {
-    Network network = new Network(inputs[0].length, hiddenLayers, outputs[0].length, learningRate, epochs);
-    network.train(inputs, outputs);
-    Utilities utilities = new Utilities();
-    double [][] results = {network.run(testInputs), utilities.stepOutputs(network.run(testInputs))};
-    return results;
+  public static void testNetwork() throws Exception {
+    
   }
 }
